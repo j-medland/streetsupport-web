@@ -10,7 +10,7 @@
 
   // Components
   &__header {
-    text-align: center;
+    text-align: left;
     margin: 0;
 
     &--story {
@@ -19,7 +19,7 @@
   }
 
   &__sub-header {
-    text-align: center;
+    text-align: left;
     margin: 0;
     color: $brand-d;
   }
@@ -28,12 +28,13 @@
     @include cf();
 
     p {
-      &:first-of-type {
-        margin-top: 0;
-      }
-
       &:last-of-type {
         margin-bottom: 0px;
+      }
+
+      &:first-of-type {
+        margin-top: 0;
+        margin-bottom: 16px;
       }
 
       .btn {
@@ -42,15 +43,22 @@
     }
 
     a {
-      color: $brand-c;
+      color: $brand-r;
       text-decoration: underline;
+      &.full-size-link {
+        display: block;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+        color: inherit;
+      }
     }
 
     .h1,
     .h2 {
-      color: $brand-h;
+      color: $brand-m;
       a {
-        color: $brand-n;
+        color: $brand-m;
       }
     }
   }
@@ -104,25 +112,13 @@
       }
 
       @include mq($from: m) {
-        .cta:first-of-type {
+        .cta:nth-of-type(3n + 1) {
           @include push(1 of $grid-column);
         }
 
         .cta:last-of-type {
           @include span(2 of $grid-column);  // Reset last style
-          @include push(0 of $grid-column); // Reset push style
-        }
-      }
-    }
-
-    &--city-header {
-      @include mq($from: m) {
-        .cta {
-          @include span(1 of 2);
-        }
-
-        .cta:last-of-type {
-          @include last();
+          @include push(3 of $grid-column); // Reset push style
         }
       }
     }
@@ -139,6 +135,7 @@
   }
 
   // Variants
+
   &--breadcrumbs {
     padding-top: 6px !important;
     padding-bottom: 6px !important;
@@ -150,21 +147,7 @@
     }
 
     @include mq($from: m) {
-      top: $header-top + $header-height + $header-height;
-    }
-  }
-
-  &--highlight {
-    background: $brand-c;
-    background: linear-gradient(to bottom, $brand-b, $brand-c);
-    color: #fff;
-
-    .h1,
-    .h2 {
-      color: #fff;
-    }
-    a {
-      color: $brand-e;
+      margin-top: -5px;
     }
   }
 
@@ -173,49 +156,37 @@
       text-align: center;
     }
   }
-
-  &--requests-detail {
-    padding: 20px 0;
-    background: $brand-i;
-  }
-
-  &--big-change-video {
-    background: black;
-    padding: 15px 0 10px 0!important;
-  }
-
-  &--cards {
-    background: $brand-q;
-    border-top: 1px solid $brand-k;
-    @include cf();
-  }
 }
 
 .block--header,
 .block--home-header,
-.block--city-header {
-  background-image: url('../img/header-background.png');
-  background-repeat: repeat-x;
-  background-position: bottom;
-  padding-top: 100px;
+.block--location-header {
   padding-bottom: 100px;
 
-  @include mq($from: m) {
-    padding-top: 60px;
-    padding-bottom: 80px;
-  }
-  
   .block__header,
   .block__sub-header {
     color: $brand-m;
   }
 }
 
+.bed-every-night-logo {
+  display: block;
+  width: 351px;
+  margin: 0 auto 20px auto;
 
-.block--city-header {
-  padding-top: 0;
+  @include mq($from: m) {
+    float: right;
+    margin: 20px;
+  }
 }
 
+.block--home-header,
+.block--location-header {
+  background-image: url('../img/header-background.png');
+  background-repeat: repeat-x;
+  background-position: bottom;
+}
+.block--location-header,
 .block--home-header {
   .block__header,
   .block__sub-header {
@@ -224,29 +195,47 @@
   }
 
   .ctas {
-    @include mq($until: m) {
-      .btn { width: 100%; }
-    }
-    @include mq($from: m) {
-      .btn__text {
-        padding: 15px 60px;
+    .btn {
+      @include span(1 of 2);
+      &:last-of-type {
+        @include last();
       }
-      .btn:first-of-type { margin-right: 20px; }
+     }
+    @include mq($from: l) {
+      .btn__text {
+        padding: 15px;
+      }
     }
   }
+}
 
+
+.block--header {
+  padding: 80px 0!important;
+}
+
+.block--home-header {
   @include mq($from: m) {
     padding-bottom: 30px;
 
-    .container { 
+    .container {
       & > * {
-        @include span(2 of 3); 
+        @include span(2 of 3);
         @include first();
       }
     }
-
   }
+}
+.block--location-header {
+  @include mq($from: m) {
 
+    .container {
+      & > * {
+        @include span(1 of 2);
+        @include first();
+      }
+    }
+  }
 }
 
 // Components
@@ -277,101 +266,6 @@
       }
     }
   }
-}
-
-.block--subpage-header {
-  padding-top: 0px;
-  padding-bottom: 0px;
-
-  @media print {
-    & { padding-top: 0px; }
-  }
-
-  @include mq($from: m) {
-    padding-bottom: 0px;
-  }
-
-  .block__header {
-    color: $brand-h;
-    padding-top: 50px;
-
-    &.has-icon--left {
-      margin: 20px 0;
-      padding-left: 60px;
-      position: relative;
-      text-align: center;
-
-      @include mq($from: m) {
-        margin: 0px 0 10px;
-        padding-left: 0;
-        padding-top: 0px;
-        text-align: center;
-      }
-
-      .block__header__icon {
-        @include size(50px);
-
-        position: absolute;
-        top: 40px;
-        left: 0;
-
-        @include mq($from: m) {
-          position: static;
-        }
-
-        &--big-change {
-          left: 50%;
-          margin-left: -90px;
-          @include mq($from: m) {
-            left: 0;
-            margin-left: 0;
-          }
-        }
-
-        &--give {
-          height: 110px;
-          width: 140px;
-          top: -40px;
-          right: 38px;
-
-          @include mq($from: m) {
-            margin-right: -28px;
-            margin-top: -30px;
-            vertical-align: middle;
-          }
-        }
-
-        &--find-help {
-          @include size(100px);
-          position: absolute;
-          left: 0;
-          top: 15px;
-          @include mq($from: m) {
-            position: inherit;
-            top: 35px;
-          }
-        }
-      }
-    }
-    &--find-help.has-icon--left {
-      padding-top: 50px;
-    }
-  }
-
-  .block__sub-header {
-    color: $brand-m;
-
-    p:first-of-type {
-      margin-top: 0;
-    }
-    p:last-of-type {
-      margin-bottom: 0;
-    }
-  }
-}
-
-.block--city-header .block__sub-header {
-  color: white!important;
 }
 
 .template--maybe-empty .block--home-promo {
@@ -423,6 +317,10 @@
   }
 }
 
+.block-tabs--cards {
+  @include printHide();
+}
+
 .block-tabs__tab {
   @include span(1 of 2);
 
@@ -432,6 +330,7 @@
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   border-top: 1px solid black;
+  cursor: pointer;
   display: block;
   margin-top: 4px;
   padding: 10px;
@@ -439,7 +338,7 @@
 
   &--selected {
     background: blue;
-    padding: 12px 30px;
+    padding: 12px 0px;
     margin-top: 0px;
   }
 
@@ -451,7 +350,7 @@
     @include span(1 of 4);
   }
 
-  &:last-of-type { 
+  &:last-of-type {
     @include last();
   }
 
@@ -474,9 +373,112 @@
 
 .home__copy {
   @include mq($from: m) {
-    @include span(1 of 2);
+    @include span(6 of 12);
     .location-selector {
       text-align: left;
+    }
+
+    &:last-child {
+      @include last();
+    }
+
+    &--left-col {
+      @include first();
+      float: left!important;
+    }
+
+    .h2 { width: 100% } // edge fix
+  }
+
+  &--standards-toolkit {
+    padding: 40px 1rem;
+    @include mq($from: m) {
+      max-width: 500px;  // half of $site-container in _variables.scss
+      padding: 40px 30px 40px 40px;
+    }
+  }
+
+  &--soton-charter {
+    padding: 40px 1rem;
+    @include mq($from: m) {
+      max-width: 500px;  // half of $site-container in _variables.scss
+      padding: 40px 30px 40px 40px;
+    }
+  }
+
+  &--bcp-changeforgood {
+    padding: 0 10px;
+    @include mq($from: m) {
+      padding: 40px 30px 40px 40px;
+    }
+  }
+
+  &--migrant-fund {
+    padding: 40px 20px;
+
+    @include mq($from: m) {
+      padding: 0px;
+    }
+  }
+
+  &--migrant-fund-logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &--big-change-mcr-logo {
+    background: $big-change-b;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+
+    img { margin-bottom: 20px; }
+
+    @include mq($from: m) {
+      position: relative;
+      &:before {
+        background: url('/assets/img/big-change-mcr-triangle.png') top left no-repeat;
+        width: 50px;
+        height: 100%;
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+      &:after {
+        background: url('/assets/img/big-change-mcr-triangle.png') top left no-repeat;
+        width: 50px;
+        height: 100%;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -1px;
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &--big-change-mcr-text {
+    padding: 40px 20px;
+    background: $big-change-a;
+
+    @include mq($from: m) {
+      padding: 40px 0px;
+    }
+  }
+
+  &--padding {
+    @include mq($from: m) {
+      @include span(5 of 12);
+
+      .home__copy--padding + & {
+        @include push(1 of 12);
+        float: left;
+      }
     }
   }
 }
@@ -494,5 +496,4 @@
 .js-map {
   height: 500px;
   width: 100%;
-  margin-bottom: 20px;
 }

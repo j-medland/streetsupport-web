@@ -1,0 +1,245 @@
+%get-in-sea {
+  @include mq($from: m) {
+    &:after {
+      content: '';
+      width: 100%;
+      height: 64px;
+      background: url('../img/locations/sea-tile.png') repeat-x;
+      position: absolute;
+      bottom: 0;
+    }
+  }
+}
+
+%align-right {
+  @include mq($from: xxl) {
+    &:before {
+      left: auto;
+      right: 0;
+    }
+  }
+}
+
+.location-header {
+  background-position: right bottom;
+  background-size: 940px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  @include mq($from: m) {
+    overflow-x: hidden;
+    &:before {
+      background-position: 66% bottom;
+      background-repeat: no-repeat;
+      background-size: 600px;
+      bottom: 2px;
+      content: '';
+      display: inline-block;
+      height: 250px;
+      left: 50%;
+      position: absolute;
+      width: 600px;
+    }
+  }
+
+  & .container {
+    position: relative;
+  }
+}
+
+.location--blackpool .location-header {
+  @include mq($from: m) {
+    min-height: 400px;
+    &:before {
+      left: auto;
+      right: 0;
+      background-size: 670px;
+      width: 670px;
+      height: 400px;
+    }
+  }
+}
+
+.location--bolton .location-header {
+  @include mq($from: m) {
+    min-height: 400px;
+    &:before {
+      background-size: 1003px;
+      width: 1003px;
+      height: 365px;
+      bottom: -1px;
+    }
+  }
+}
+
+.location--bournemouth .location-header {
+  @include mq($from: m) {
+    &:before {
+      background-size: 842px;
+      width: 842px;
+      bottom: 0px;
+      height: 500px;
+    }
+    height: 500px;
+  }
+  @include mq($from: xxxl) {
+    &:before {
+      left: auto;
+      right: 0%;
+    }
+  }
+  @extend %get-in-sea;
+}
+
+.location--bury .location-header {
+  @include mq($from: m) {
+    min-height: 400px;
+    &:before {
+      background-size: 800px;
+      width: 800px;
+      height: 302px;
+    }
+  }
+}
+
+.location--leeds .location-header {
+  @include mq($from: m) {
+    &:before {
+      height: 278px;
+    }
+  }
+}
+
+.location--manchester .location-header {
+  @include mq($from: m) {
+    &:before {
+      background-size: 650px;
+      width: 650px;
+    }
+    min-height: 320px;
+  }
+}
+
+.location--oldham .location-header {
+  @include mq($from: m) {
+    min-height: 400px;
+    &:before {
+      background-size: 857px;
+      width: 857px;
+      height: 389px;
+    }
+  }
+}
+
+.location--portsmouth .location-header {
+  @include mq($from: m) {
+    &:before {
+      background-size: 600px;
+      width: 600px;
+      height: 270px;
+      bottom: 10px;
+    }
+  }
+  @extend %get-in-sea;
+}
+
+.location--rochdale .location-header {
+  @include mq($from: m) {
+    &:before {
+      background-size: 800px;
+      background-position: left bottom;
+      width: 100%;
+      bottom: -18px;
+    }
+  }
+}
+
+
+.location--salford .location-header {
+  @include mq($from: m) {
+    &:before {
+      background-size: 680px;
+      background-position: left bottom;
+      width: 100%;
+      height: 349px;
+      bottom: -49px;
+    }
+  }
+}
+
+.location--southampton .location-header {
+  @include mq($from: m) {
+    &:before {
+      background-size: 1200px;
+      background-position: left bottom;
+      width: 100%;
+      bottom: 7px;
+    }
+  }
+  @include mq($from: l) {
+    &:before {
+      left: 36%;
+    }
+  }
+  @extend %get-in-sea;
+}
+
+.location--stockport .location-header {
+  @include mq($from: m) {
+    &:before {
+      background-size: 800px;
+      background-position: left bottom;
+      width: 100%;
+      bottom: 7px;
+    }
+  }
+}
+
+.location--tameside .location-header {
+  @include mq($from: m) {
+    min-height: 400px;
+    &:before {
+      background-size: 750px;
+      width: 750px;
+      height: 302px;
+    }
+  }
+}
+
+.location--trafford .location-header {
+  @include mq($from: m) {
+    min-height: 400px;
+    &:before {
+      background-size: 807px;
+      width: 807px;
+      height: 342px;
+      bottom: -11px;
+    }
+  }
+}
+
+.location--wakefield .location-header {
+  @include mq($from: m) {
+    min-height: 400px;
+    &:before {
+      background-size: 807px;
+      width: 807px;
+      height: 351px;
+      bottom: -65px;
+    }
+  }
+}
+
+.location--wigan-and-leigh .location-header {
+  @include mq($from: m) {
+    min-height: 400px;
+    &:before {
+      background-size: 800px;
+      width: 800px;
+      height: 354px;
+    }
+  }
+}

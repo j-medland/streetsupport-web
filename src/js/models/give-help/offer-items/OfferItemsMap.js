@@ -74,6 +74,7 @@ var OfferItemModel = function () {
   const buildInfoWindowMarkup = function (provider) {
     return `<div class="card card--brand-h card--gmaps">
               <div class="card__title">
+                <button class="card__close js-popup-close" title="close">&#10799;</button>
                 <h1 class="h2"><a href="/find-help/organisation/?organisation=${provider.key}">${htmlEncode.htmlDecode(provider.name)}</a></h1>
                 <p>${htmlEncode.htmlDecode(provider.itemDonationDescription)}</p>
               </div>
@@ -98,12 +99,12 @@ var OfferItemModel = function () {
         marker.addListener('click', function () {
           document.querySelectorAll('.card__gmaps-container')
             .forEach((p) => p.parentNode.removeChild(p))
-          const position = new google.maps.LatLng(this.position.lat(), this.position.lng())
           popup = new googleMaps.Popup(
-            position,
+            this.position.lat(),
+            this.position.lng(),
             buildInfoWindowMarkup(provider))
           popup.setMap(self.map)
-          self.map.setCenter(position)
+          self.map.setCenter(new google.maps.LatLng(this.position.lat(), this.position.lng()))
         })
 
         self.markers.push(marker)

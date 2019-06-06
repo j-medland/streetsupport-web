@@ -118,6 +118,11 @@ describe('all organisations', () => {
     expect(org.distanceDescription).toEqual('9592.95 km away')
   })
 
+  it('- should set client groups', () => {
+    const org = sut.organisations()[0]
+    expect(org.clientGroupKeys).toEqual(['cg-1', 'cg-2'])
+  })
+
   it('- should notify user it has loaded', () => {
     expect(browserLoadedStub.calledAfter(ajaxStub)).toBeTruthy()
   })
@@ -130,11 +135,11 @@ describe('all organisations', () => {
     it('- should display next eight orgs', () => {
       expect(sut.orgsToDisplay()[sut.pageSize].key).toEqual('nacro-housing-services')
     })
-  
+
     it('- should show prev page button', () => {
       expect(sut.hasPrevPages()).toBeTruthy()
     })
-  
+
     it('- should show next page button', () => {
       expect(sut.hasMorePages()).toBeTruthy()
     })
@@ -146,7 +151,24 @@ describe('all organisations', () => {
         sut.nextPage()
         sut.nextPage()
       })
-  
+
+      it('- should show next page button', () => {
+        expect(sut.hasMorePages()).toBeTruthy()
+      })
+    })
+
+    it('- should show next page button', () => {
+      expect(sut.hasMorePages()).toBeTruthy()
+    })
+
+    describe('- penultimate page', () => {
+      beforeEach(() => {
+        sut.nextPage()
+        sut.nextPage()
+        sut.nextPage()
+        sut.nextPage()
+      })
+
       it('- should show next page button', () => {
         expect(sut.hasMorePages()).toBeTruthy()
       })
@@ -154,11 +176,11 @@ describe('all organisations', () => {
 
     describe('- no more items', () => {
       beforeEach(() => {
-        for(let i = 2; i < Math.ceil(sut.organisations().length / sut.pageSize); i++) {
+        for (let i = 2; i < Math.ceil(sut.organisations().length / sut.pageSize); i++) {
           sut.nextPage()
         }
       })
-  
+
       it('- should hide next page button', () => {
         expect(sut.hasMorePages()).toBeFalsy()
       })
@@ -198,6 +220,18 @@ describe('all organisations', () => {
   describe('- search', () => {
     describe('- start of string', () => {
       beforeEach(() => {
+        ajaxStub
+          .withArgs(`${endpoints.serviceProviderLocations}?providerName=coffee`)
+          .returns({
+            then: (success) => {
+              success({
+                'status': 'ok',
+                'statusCode': 200,
+                'data': spLocationData.coffee
+              })
+            }
+          })
+
         sut.searchQuery('coffee')
         sut.search()
       })
@@ -207,55 +241,90 @@ describe('all organisations', () => {
         expect(sut.orgsToDisplay()[0].key).toEqual('coffee4craig')
       })
     })
-    
-    describe('- middle of string', () => {
+
+    describe('- client group filters', () => {
+      it('- should list available filters', () => {
+        expect(sut.clientGroupFilters().length).toEqual(4)
+      })
+
+      describe('- filtering', () => {
+        beforeEach(() => {
+          sut.clientGroupFilters().find((cgf) => cgf.key === 'cg-3').click()
+        })
+
+        it('- should filter displayed orgs to only those with matching client group', () => {
+          expect(sut.orgsToDisplay().length).toEqual(2)
+        })
+
+        describe('- with multiple', () => {
+          let filterToToggle
+
+          beforeEach(() => {
+            filterToToggle = sut.clientGroupFilters().find((cgf) => cgf.key === 'cg-4')
+            filterToToggle.click()
+          })
+
+          it('- should mark filter as selected', () => {
+            expect(filterToToggle.isSelected()).toBeTruthy()
+          })
+
+          it('- should filter displayed orgs to only those with matching client group', () => {
+            expect(sut.orgsToDisplay().length).toEqual(1)
+          })
+
+          describe('- toggle off', () => {
+            beforeEach(() => {
+              filterToToggle.click()
+            })
+
+            it('- should filter displayed orgs to only those with matching client group', () => {
+              expect(sut.orgsToDisplay().length).toEqual(2)
+            })
+
+            it('- should un-mark filter as selected', () => {
+              expect(filterToToggle.isSelected()).toBeFalsy()
+            })
+          })
+        })
+      })
+    })
+
+    describe('- enter new postcode', () => {
+      let setPostcodeStub = null
+      let setPostcodeArgs = null
+
       beforeEach(() => {
-        sut.searchQuery('ple fir')
-        sut.search()
+        ajaxStub.reset()
+        browserLoadingStub.reset()
+        browserLoadedStub.reset()
+        setPostcodeStub = sinon.stub(location, 'setPostcode')
+
+        sut.postcode('new postcode')
+        sut.getByPostcode()
+
+        setPostcodeArgs = setPostcodeStub.getCalls()[0].args
+        setPostcodeArgs[1](locationResult)
       })
 
-      it('- should filter by search query', () => {
-        expect(sut.orgsToDisplay().length).toEqual(1)
-        expect(sut.orgsToDisplay()[0].key).toEqual('people-first-housing')
+      afterEach(() => {
+        location.setPostcode.restore()
       })
-    })
-  })
 
-  describe('- enter new postcode', () => {
-    let setPostcodeStub = null
-    let setPostcodeArgs = null
+      it('- should set new postcode', () => {
+        expect(setPostcodeArgs[0]).toEqual('new postcode')
+      })
 
-    beforeEach(() => {
-      ajaxStub.reset()
-      browserLoadingStub.reset()
-      browserLoadedStub.reset()
-      setPostcodeStub = sinon.stub(location, 'setPostcode')
+      it('- should notify user it is loading', () => {
+        expect(browserLoadingStub.calledOnce).toBeTruthy()
+      })
 
-      sut.postcode('new postcode')
-      sut.getByPostcode()
+      it('- should load data', () => {
+        expect(ajaxStub.calledAfter(browserLoadingStub)).toBeTruthy()
+      })
 
-      setPostcodeArgs = setPostcodeStub.getCalls()[0].args
-      setPostcodeArgs[1](locationResult)
-    })
-
-    afterEach(() => {
-      location.setPostcode.restore()
-    })
-
-    it('- should set new postcode', () => {
-      expect(setPostcodeArgs[0]).toEqual('new postcode')
-    })
-
-    it('- should notify user it is loading', () => {
-      expect(browserLoadingStub.calledOnce).toBeTruthy()
-    })
-
-    it('- should load data', () => {
-      expect(ajaxStub.calledAfter(browserLoadingStub)).toBeTruthy()
-    })
-
-    it('- should notify user it has loaded', () => {
-      expect(browserLoadedStub.calledAfter(ajaxStub)).toBeTruthy()
+      it('- should notify user it has loaded', () => {
+        expect(browserLoadedStub.calledAfter(ajaxStub)).toBeTruthy()
+      })
     })
   })
 })

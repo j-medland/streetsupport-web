@@ -2,7 +2,9 @@
 
 import './common'
 
+const api = require('./get-api-data')
 const browser = require('./browser')
+const endpoints = require('./api')
 const location = require('./location/locationSelector')
 const googleMaps = require('./location/googleMaps')
 const supportedCities = require('./location/supportedCities')
@@ -39,21 +41,53 @@ const displayMap = function (hubs) {
   }, 1000)
 }
 
-const init = () => {
-  const theData = {
-    locations: [{ id: '', name: '- Select a location -' }, ...supportedCities.locations]
-  }
-  const callback = function () {
-    location.handler((result) => {
-      if (result.length) {
-        redirectToHubPage(result)
+const initLocationDropdown = function () {
+  location.handler((result) => {
+    if (result.length) {
+      redirectToHubPage(result)
+    }
+  }, '.js-change-location-select')
+
+  document.querySelector('.js-change-location-btn')
+    .addEventListener('click', () => {
+      const locationId = document.querySelector('.js-change-location-select').value
+      if (locationId.length > 0) {
+        redirectToHubPage(locationId)
       }
-    }, '.js-homepage-promo-location-selector')
+    })
+}
 
-    displayMap(supportedCities.locations)
-  }
+const initStats = function () {
+  const stats = [
+    { field: 'totalServiceProviders', link: '/find-help/all-service-providers/', label: 'Organisations' },
+    { field: 'totalServices', link: '/find-help/', label: 'Services' },
+    { field: 'totalNeeds', link: '/give-help/help/', label: 'Needs' }
+  ]
+  const requiredStats = ['totalServiceProviders', 'totalServices', 'totalNeeds']
+  api
+    .data(endpoints.statistics + 'latest')
+    .then((result) => {
+      const theData = {
+        statistics: requiredStats
+          .map((rs) => {
+            const reqStat = stats.find((s) => s.field === rs)
+            return {
+              total: result.data[rs],
+              link: reqStat.link,
+              label: reqStat.label
+            }
+          })
+      }
 
-  templating.renderTemplate('js-content-tpl', theData, 'js-template-output', callback)
+      templating.renderTemplate('js-statistics-tpl', theData, 'js-statistics-output')
+    }, (_) => {
+    })
+}
+
+const init = () => {
+  displayMap(supportedCities.locations)
+  initLocationDropdown()
+  initStats()
 }
 
 init()

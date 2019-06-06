@@ -3,12 +3,11 @@ import fs from 'fs'
 import gulp from 'gulp'
 import request from 'request'
 import runSequence from 'run-sequence'
+import marked from 'marked'
 
 import config from '../foley.json'
 import endpoints from '../src/js/api'
 import { newFile } from './fileHelpers'
-
-import { cities } from '../src/data/generated/supported-cities'
 
 const findHelpSrc = `${config.paths.pages}find-help/`
 const categoryPageSrc = `${findHelpSrc}category/index.hbs`
@@ -17,8 +16,18 @@ const locationPageSrc = `${findHelpSrc}category-by-location/index.hbs`
 const generatedPagesSrc = `${config.paths.pages}_generated/`
 
 let categories = []
+let cities = []
 
 gulp.task('getServiceCategories', (callback) => {
+  const getPageUrl = (key) => {
+    switch (key) {
+      case 'meals': return 'meals/timetable'
+      case 'dropin': return 'dropin/timetable'
+      case 'accom': return 'accommodation'
+      default: return key
+    }
+  }
+
   request(endpoints.serviceCategories, function (err, res, body) {
     categories = JSON.parse(body)
       .sort((a, b) => {
@@ -29,34 +38,55 @@ gulp.task('getServiceCategories', (callback) => {
       .map((c) => {
         return {
           key: c.key,
-          name: c.name
+          name: c.name,
+          synopsis: c.synopsis,
+          page: getPageUrl(c.key)
         }
       })
     callback()
   })
 })
 
+gulp.task('getCities', (callback) => {
+  request(endpoints.cities, function (err, res, body) {
+    cities = JSON.parse(body)
+    callback()
+  })
+})
+
 const getNewContent = function (src, cat) {
-  const result = src
+  let result = src
     .replace('page:', `page: find-help-${cat.key}`)
     .replace('title:', `title: ${cat.name} Services - Street Support`)
     .replace('description:', `description: A comprehensive listing of ${cat.name} Services available near your location`)
+    .replace('theServiceCategoryId', cat.key)
+
+    result = result.split('theServiceCategoryName').join(cat.name)
+    result = result.split('theServiceCategorySynopsis').join(marked(cat.synopsis))
   return result
 }
 
 const getNewTimeTabledContent = function (src, cat) {
-  const result = src
+  let result = src
     .replace('page:', `page: find-help-${cat.key}`)
     .replace('title:', `title: ${cat.name} Services Timetable - Street Support`)
     .replace('description:', `description: Timetable of ${cat.name} Services available near your location`)
+    .replace('theServiceCategoryId', cat.key)
+
+    result = result.split('theServiceCategoryName').join(cat.name)
+    result = result.split('theServiceCategorySynopsis').join(marked(cat.synopsis))
   return result
 }
 
 const getNewLocationContent = function (src, cat) {
-  const result = src
+  let result = src
     .replace('page:', `page: find-help-${cat.key}`)
     .replace('title:', `title: ${cat.name} Services by Location - Street Support`)
     .replace('description:', `description: ${cat.name} Services by location available near you`)
+    .replace('theServiceCategoryId', cat.key)
+
+  result = result.split('theServiceCategoryName').join(cat.name)
+  result = result.split('theServiceCategorySynopsis').join(marked(cat.synopsis))
   return result
 }
 
@@ -117,22 +147,47 @@ gulp.task('generate-map-pages', () => {
     })
 })
 
+gulp.task('generate-category-ctas', () => {
+  const categoryCtaTemplate = `<span class="cta">
+    <a class="btn btn--brand-d" id="{{key}}" href="{{page}}">
+      <span class="btn__icon">
+        <svg class="svg-{{key}}-dims"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/svgsprite.svg#{{key}}"></use></svg>
+        <span class="btn__overlay"></span>
+      </span>
+      <span class="btn__text">{{name}}</span>
+    </a>
+  </span>`
+  const output = categories
+    .map((c) => {
+      let current = categoryCtaTemplate
+      current = current.split('\n').join('')
+      current = current.split('{{key}}').join(c.key)
+      current = current.split('{{name}}').join(c.name)
+      current = current.split('{{page}}').join(c.page)
+      return current
+    })
+    .join('')
+  const srcFile = `${config.paths.partials}/find-help/`
+  return newFile('_generated-service-cats-ctas.hbs', output)
+    .pipe(gulp.dest(srcFile))
+})
+
 gulp.task('generate-nav-links', () => {
   const srcFile = `${config.paths.partials}/nav/`
   const output = categories
     .map((c) => {
-      switch(c.key) {
+      switch (c.key) {
         case 'accom':
-          return `<li class="nav__item nav__item--find-help-${c.key}"><a href="/find-help/accommodation/">${c.name}</a></li>`
+          return `<li class="nav__item nav__item--sub-item nav__item--find-help-${c.key}"><a href="/find-help/accommodation/">${c.name}</a></li>`
         case 'meals':
         case 'dropin':
         case 'foodbank':
-          return `<li class="nav__item nav__item--find-help-${c.key}"><a href="/find-help/${c.key}/timetable/">${c.name}</a></li>`
+          return `<li class="nav__item nav__item--sub-item nav__item--find-help-${c.key}"><a href="/find-help/${c.key}/timetable/">${c.name}</a></li>`
         default:
-          return `<li class="nav__item nav__item--find-help-${c.key}"><a href="/find-help/${c.key}/">${c.name}</a></li>`
+          return `<li class="nav__item nav__item--sub-item nav__item--find-help-${c.key}"><a href="/find-help/${c.key}/">${c.name}</a></li>`
       }
     })
-    .join('')
+    .join('\n')
 
   return newFile('service-cats.hbs', output)
     .pipe(gulp.dest(srcFile))
@@ -145,7 +200,7 @@ gulp.task('generate-nav-variables', () => {
     .join(' ')
 
   const cityOutput = cities
-    .map((c) => `${c.id}-emergency-help`)
+    .map((c) => `${c.id}-advice`)
     .join(' ')
 
   return newFile('_generated-variables.scss', `$generated-nav-pages: ${catOutput} ${cityOutput}`)
@@ -161,11 +216,13 @@ gulp.task('generate-service-pages', (callback) => {
   runSequence(
     'reset',
     'getServiceCategories',
+    'getCities',
     'make-generated-files-directory',
     'generate-provider-directories',
     ['generate-provider-listing-pages', 'generate-timetabled-pages', 'generate-map-pages'],
     'copy-to-find-help',
     'clean-generated-files',
+    'generate-category-ctas',
     'generate-nav-links',
     'generate-nav-variables',
     callback

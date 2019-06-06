@@ -1,12 +1,13 @@
 ---
 title: Apply for a Best Practice standard for volunteer-led services - Working together to end homelessness in Manchester
 description: Be recognised for the quality of your services
-image: https://streetsupport.net/assets/img/og/manchester-big-change.png
+image: https://streetsupport.net/assets/img/og/manchester-big-change.jpg
 layout: default.hbs
 permalink: false
 jsBundle: bestpracticeawardsapply
 section: toolkit
 page: apply
+location: manchester
 ---
 
 <div class="block block--breadcrumbs">
@@ -20,8 +21,8 @@ page: apply
   </div>
 </div>
 
-<div class="block block--city-header city-header city-header--manchester">
-  <div class="container container--city-header">
+<div class="block block--location-header location-header location-header--manchester">
+  <div class="container container--location-header">
     <h1 class="h1 block__header">Apply</h1>
     <h2 class="h2 block__sub-header">Apply for a Best Practice standard</h2>
   </div>
@@ -63,14 +64,14 @@ page: apply
             <li class="form__field-item">
               <label class="form__label">I am enquiring about:</label>
               <ul class="form__radio-group">
-                <li class="form__radio-group-item"><label for="commended">
-                  <input type="radio" id="silver" name="awardType" data-bind="checked: selectedAward" /> Silver Best Practice standard</label>
+                <li class="form__radio-group-item"><label for="silver">
+                  <input type="radio" id="silver" name="awardType" value="silver" data-bind="checked: selectedAward" /> Silver Best Practice standard</label>
                 </li>
-                <li class="form__radio-group-item"><label for="distinctive">
-                  <input type="radio" id="gold" name="awardType" data-bind="checked: selectedAward" /> Gold Best Practice standard</label>
+                <li class="form__radio-group-item"><label for="gold">
+                  <input type="radio" id="gold" name="awardType" value="gold" data-bind="checked: selectedAward" /> Gold Best Practice standard</label>
                 </li>
                 <li class="form__radio-group-item"><label for="not-sure">
-                  <input type="radio" id="not-sure" name="awardType" data-bind="checked: selectedAward" /> Not sure</label>
+                  <input type="radio" id="not-sure" name="awardType" value="not-sure" data-bind="checked: selectedAward" /> Not sure</label>
                 </li>
               </ul>
             </li>

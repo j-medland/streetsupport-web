@@ -59,13 +59,13 @@ let popHistory = () => {
 }
 
 let setOnHistoryPop = (onPopCallback) => {
-  window.onpopstate = () => {
-    onPopCallback()
+  window.onpopstate = (e) => {
+    onPopCallback(e)
   }
 }
 
 var scrollTo = function (selector) {
-  const mobileHeader = document.querySelector('.header--mobile')
+  const mobileHeader = document.querySelector('.header')
 
   const getDesktopHeaderHeight = () => {
     const desktopHeader = document.querySelector('.sticky')

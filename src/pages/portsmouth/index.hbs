@@ -1,12 +1,13 @@
 ---
-title: Street Support Network Portsmouth - Working together to end homelessness in Portsmouth
-description: Street Support Network - Find help, and give help, to support people who are homeless in Portsmouth
-image: https://streetsupport.net/assets/img/og/street-support.png
-layout: default.hbs
+title: Street Support Portsmouth - Working together to end homelessness in Portsmouth
+description: Street Support - Find help, and give help, to support people who are homeless in Portsmouth
+image: https://streetsupport.net/assets/img/og/street-support-portsmouth.jpg
+layout: withGoogle.hbs
 permalink: false
-jsBundle: hub
+jsBundle: location-home-page
 section: home
 page: portsmouth
+location: portsmouth
 ---
 
 <div class="block block--breadcrumbs">
@@ -18,55 +19,69 @@ page: portsmouth
   </div>
 </div>
 
-<script id="js-news-tpl" type="text/template">
-    {{> news-posts city="Portsmouth" }}
-</script>
-
-<div class="block block--city-header city-header city-header--portsmouth">
-  <div class="container container--city-header">
+<div class="block block--location-header location-header location-header--portsmouth">
+  <div class="container">
     <h1 class="h1 block__header">Street Support Portsmouth</h1>
-    <div class="block__cta block__cta--city-header">
-      {{>cta brand="d" link="/find-help/" name="Find Help"}}
-      {{>cta brand="e" link="/give-help/" name="Give Help"}}
+    <h2 class="h2 block__sub-header">Connecting people and organisations locally, to end homelessness in Portsmouth.</h2>
+    <div class="ctas">
+      <a href="/find-help" class="btn btn--brand-d">
+        <span class="btn__text">Find Help</span>
+      </a>
+      <a href="/give-help" class="btn btn--brand-e">
+        <span class="btn__text">Give Help</span>
+      </a>
     </div>
   </div>
 </div>
 
-<div class="block block--promo block--pulldown">
+<div id="js-swep-output"></div>
+
+<div class="block">
   <div class="container">
-    <div class="block__content">
-      <p>Street Support is a network of organisations, voluntary groups and kind-hearted folk, working together to end homelessness. You can find support services for people experiencing homelessness, and DO something to help - offering your time, money and resources to local organisations.</p>
-      {{> social-share class="social-share--home" text="Share Street Support with your friends to show your commitment to ending homelessness in Portsmouth: " }}
+    <div class="home__copy home__copy--padding">
+      <h1 class="h2">You're in Portsmouth</h1>
+      {{> locations/find-help }}
+      {{> locations/selector-hogan }}
+    </div>
+    <div class="home__copy">
+      <div class="js-map"></div>
     </div>
   </div>
 </div>
 
-<div class="block block--highlight">
-  <div class="container">
-      <div class="block__content">
-        <div class="block__cta block__cta--incopy block__cta--2 block--pushup">
-          {{>cta brand="d" icon="findhelp" link="/find-help/" name="Find Help"}}
-          {{>cta brand="e" icon="givehelp" link="/give-help/" name="Give Help"}}
-        </div>
-        <div id="js-template-output"></div>
-   </div>
- </div>
+<div id="js-statistics-output"></div>
+
+<div class="block block--minor-highlight">
+  <div class="container container--central-cta">
+    <div class="block__content block__content--central-cta block__content--join-mailing-list">
+      <h1 class="h2">Get in touch</h1>
+      <p>If you would like to get involved, or have any offers, questions or suggestion, please get in touch at <a href="mailto: portsmouth@streetsupport.net">portsmouth@streetsupport.net</a>.</p>
+    </div>
+  </div>
 </div>
 
 <div id="js-news-output"></div>
-
-{{> portsmouth/home-promo }}
 
 <div class="block block--highlight block--promo">
   <div class="container">
     <div class="block__content partners">
       {{> portsmouth/supporters }}
-      <p>We are looking for businesses and organisations to <a href="/give-help/partnership/">support us</a> so that we can continue to develop this resource.</p>
+      <p>We are looking for businesses and organisations to <a href="/give-help/business-support/">support us</a> so that we can continue to develop this resource.</p>
       <p>If you share our vision of a society without homelessness, please <a href="mailto:sponsorship@streetsupport.net">get in touch</a>.</p>
     </div>
   </div>
 </div>
 
-<script id="js-content-tpl" type="text/template">
-  {{> portsmouth/stats }}
+{{> loading-spinner}}
+
+<script id="js-swep-tpl" type="text/template">
+{{> find-help/swep-notification theLocationId="portsmouth" }}
+</script>
+
+<script id="js-news-tpl" type="text/template">
+    {{>news-posts }}
+</script>
+
+<script id="js-statistics-tpl" type="text/template">
+  {{> impact-statistics }}
 </script>

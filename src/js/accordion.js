@@ -35,7 +35,11 @@ var init = function (showFirst, indexToOpen, listener, showAll, selectors = defa
   // Add click listener to headers
   for (i = 0; i < headers.length; i++) {
     headers[i].addEventListener('click', function (e) {
-      open(this, el)
+      const isActive = Array.from(e.target.classList).includes(activeClass)
+      const action = isActive
+        ? close
+        : open
+      action(this, el)
     })
     if (showAll) {
       headers[i].nextElementSibling.classList.add(activeClass)
@@ -71,13 +75,21 @@ var baseOpen = function (el, context, noAnalytics) {
 }
 
 var close = function (el, context) {
-  for (var i = 0; i < context.length; i++) {
-    var currAccordion = context[i]
+  const closeInActive = function (currAccordion) {
     var children = currAccordion.children
 
     // Remove active classes in accordion
     for (var b = 0; b < children.length; b++) {
       children[b].classList.remove(activeClass)
+    }
+  }
+
+  if (!context.length) {
+    closeInActive(context)
+  } else {
+    for (var i = 0; i < context.length; i++) {
+      var currAccordion = context[i]
+      closeInActive(currAccordion)
     }
   }
 }

@@ -2,6 +2,12 @@
 
 .form {
   @include cf();
+
+  margin-bottom: 20px;
+
+  & + .form {
+    margin-top: 20px;
+  }
 }
 
 .form--partnership,
@@ -40,9 +46,16 @@
   background: white;
   padding: 20px 20px 5px 20px;
   margin: 15px 0 30px 0;
+
+  @include printHide();
+
   @include mq($from: m) {
     @include span(2 of 6);
     @include last();
+  }
+
+  .form__fieldset {
+    margin-top: 0
   }
 }
 
@@ -50,6 +63,18 @@
   border: none;
   margin: 20px 0 0 0;
   padding: 0;
+
+  &--inline-fill {
+    margin: 0;
+    @include mq($from: m) {
+      margin: 0 0 20px 0;
+    }
+    .form__fieldset-inline-fill-container { 
+      @include mq($from: m) {
+        display: flex;
+      }
+    }
+  }
 }
 
 .form__fieldset-title {
@@ -132,10 +157,27 @@
   outline: none;
   padding: 10px;
   width: 100%;
+
+  & + label + & {
+    margin-top: 10px;
+    @include mq($from: m) {
+      margin-top: 0;
+    }
+  }
 }
 
 .form__input--inline {
   display: inline;
+}
+
+.form__input--inline-fill {
+  width: 100%;
+  @include mq($from: m) {
+    flex-grow: 2;
+    width: 100px; /* arbitrary width to stop <option> tags messing up flex width */
+    margin-right: 0.5em;
+    & * { width: 100px; /* arbitrary width to stop <option> tags messing up flex width */ }
+  }
 }
 
 .form__input--short {

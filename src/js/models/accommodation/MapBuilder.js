@@ -1,4 +1,8 @@
+/* global google */
+
 const gMaps = require('../../location/googleMaps')
+
+let popup = null
 
 const MapBuilder = function () {
   const self = this
@@ -10,17 +14,30 @@ const MapBuilder = function () {
 
         self.infoWindows.push(infoWindow)
 
-        const marker = gMaps.buildMarker({ latitude: p.latitude(), longitude: p.longitude() }, self.map)
+        const marker = gMaps.buildMarker(self.getLocation(p), self.map)
 
         marker.customFields = {
           mapIndex: i
         }
 
         marker.addListener('click', function () {
-          self.infoWindows
-            .forEach((w) => w.close())
-          infoWindow.open(self.map, marker)
-          self.container.markerClicked(this.customFields.mapIndex)
+          document.querySelectorAll('.card__gmaps-container')
+            .forEach((p) => p.parentNode.removeChild(p))
+
+          const location = self.getLocation(p)
+
+          const position = new google.maps.LatLng(location.latitude, location.longitude)
+
+          popup = new gMaps.Popup(
+            location.latitude,
+            location.longitude,
+            self.buildInfoWindowMarkup(p))
+
+          popup.setMap(self.map)
+          self.map.setCenter(position)
+          if (self.container) {
+            self.container.markerClicked(this.customFields.mapIndex)
+          }
         })
 
         self.markers.push(marker)
@@ -54,12 +71,14 @@ const MapBuilder = function () {
     self.updateMarkers(items)
   }
 
-  self.init = function (items, userLocation, container, buildInfoWindowMarkup) {
-    console.log({items})
-    self.map = gMaps.buildMap(userLocation)
+  self.init = function (items, userLocation, container, buildInfoWindowMarkup, getLocation = (p) => {
+    return { latitude: p.latitude(), longitude: p.longitude() }
+  }, customOptions = {}) {
+    self.map = gMaps.buildMap(userLocation, customOptions)
 
     self.container = container
     self.buildInfoWindowMarkup = buildInfoWindowMarkup
+    self.getLocation = getLocation
 
     self.markers
       .forEach((m) => m.setMap(null))

@@ -1,40 +1,36 @@
 ---
 title: Severe Weather Emergency Accommodation in Bournemouth - Street Support
 description: Severe Weather Emergency Accommodation provision in Bournemouth.
-image: https://streetsupport.net/assets/img/og/street-support.png
+image: https://streetsupport.net/assets/img/og/street-support-bournemouth.jpg
 layout: default.hbs
 permalink: false
 jsBundle: swep
 section: bournemouth
-page: bournemouth-emergency-help
+page: bournemouth-advice
+location: bournemouth
 ---
 
 <div class="block block--breadcrumbs">
   <div class="container">
     <ol class="breadcrumbs__list">
       <li class="breadcrumbs__item"><a href="/">Home</a></li>
-      <li class="breadcrumbs__item"><a href="/bournemouth/">Bournemouth</a></li>
-      <li class="breadcrumbs__item"><a href="/bournemouth/emergency-help/">Emergency Advice</a></li>
+      <li class="breadcrumbs__item"><a href="/bournemouth/">Bournemouth, Christchurch &amp; Poole</a></li>
+      <li class="breadcrumbs__item"><a href="/bournemouth/advice/">Advice</a></li>
       <li class="breadcrumbs__item">Severe Weather Emergency Accommodation</li>
     </ol>
   </div>
 </div>
 
-<div class="block block--city-header city-header city-header--bournemouth">
-  <div class="container container--city-header">
-    <h1 class="h1 block__header">Severe Weather Emergency Accommodation</h1>
-    <div id="js-swep-output" class="template--maybe-empty"></div>
-  </div>
-</div>
+{{> find-help/advice-header heading="Severe Weather Emergency Accommodation" theLocationId="bournemouth" }}
 
 <div class="block">
   <div class="container">
     <div class="block__content">
-      <p>Severe Weather Emergency Protocol for Bournemouth and Poole has been triggered by the weather forecast starting tonight Thursday 22 February and is likely to continue for at least a week.</p>
+      <p>Severe Weather Emergency Provision Protocol for Bournemouth and Poole has been triggered, and will remain in place until further notice.</p>
 
-      <p>The meeting point for rough sleepers in Bournemouth is St Stephen’s Church Hall at 8.30pm.</p>
+      <p>The meeting point for the Bournemouth provision is St Stephen’s Church Hall at 8:15pm.</p>
 
-      <p>The meeting point for rough sleepers in Poole is the Salvation Army car park Hill Street Poole for 8.15pm (Rough sleepers will be transported by the team from Salvation Army to Gateway Church Hall off Alder Road).</p>
+      <p>The meeting point for the Poole provision is at Skinner Street United Reform Church Hall at 8:30pm.</p>
 
 </p>
     </div>
@@ -43,7 +39,3 @@ page: bournemouth-emergency-help
     
   </div>
 </div>
-
-<script id="js-swep-tpl" type="text/template">
-{{> swep-notification }}
-</script>

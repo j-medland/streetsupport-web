@@ -1,12 +1,13 @@
 ---
-title: Street Support Manchester - Working together to end homelessness in Greater Manchester
-description: Street Support - Find help, and give help, to support people who are homeless in Greater Manchester
-image: https://streetsupport.net/assets/img/og/street-support-manchester.png
-layout: default.hbs
+title: Street Support Manchester - Working together to end homelessness in Manchester
+description: Street Support - Find help, and give help, to support people who are homeless in Manchester
+image: https://streetsupport.net/assets/img/og/street-support-manchester.jpg
+layout: withGoogle.hbs
 permalink: false
-jsBundle: hub
+jsBundle: location-home-page
 section: home
 page: manchester
+location: manchester
 ---
 
 <div class="block block--breadcrumbs">
@@ -18,64 +19,89 @@ page: manchester
   </div>
 </div>
 
-<script id="js-news-tpl" type="text/template">
-    {{>news-posts city="Manchester"}}
-</script>
-
-<div class="block block--city-header city-header city-header--manchester">
-  <div class="container container--city-header">
-    <h1 class="h1 block__header">Street Support Greater Manchester</h1>
-    <div class="block__cta block__cta--city-header">
-      <div id="js-swep-output" class="template--maybe-empty"></div>
-      {{>cta brand="d" link="/find-help/" name="Find Help"}}
-      {{>cta brand="e" link="/give-help/" name="Give Help"}}
+<div class="block block--location-header location-header location-header--manchester">
+  <div class="container">
+    <h1 class="h1 block__header">Street Support Manchester</h1>
+    <h2 class="h2 block__sub-header">Connecting people and organisations locally, to end homelessness in Manchester.</h2>
+    <div class="ctas">
+      <a href="/find-help" class="btn btn--brand-d">
+        <span class="btn__text">Find Help</span>
+      </a>
+      <a href="/give-help" class="btn btn--brand-e">
+        <span class="btn__text">Give Help</span>
+      </a>
     </div>
   </div>
 </div>
 
-<div id="js-template-output"></div>
+<div id="js-swep-output"></div>
 
-{{> loading-spinner}}
-
-<script id="js-content-tpl" type="text/template">
-
-<div class="block block--promo block--pulldown">
+<div class="block">
   <div class="container">
-    <div class="block__content">
-      <p>Street Support is a network of organisations, voluntary groups and kind-hearted folk, working together to end homelessness. You can find support services for people experiencing homelessness, and DO something to help - offering your time, money and resources to local organisations.</p>
-      {{> social-share class="social-share--home" text="Share Street Support with your friends to show your commitment to making a big change: " }}
+    <div class="home__copy home__copy--padding">
+      <h1 class="h2">You're in Manchester</h1>
+      {{> locations/find-help }}
+      {{> locations/selector-hogan }}
+    </div>
+    <div class="home__copy">
+      <div class="js-map"></div>
     </div>
   </div>
 </div>
 
-<div class="block block--highlight">
-  <div class="container">
-    <div class="block__content">
-      <div class="block__cta block__cta--incopy block__cta--2 block--pushup">
-        {{>cta brand="d" icon="findhelp" link="/find-help/" name="Find Help"}}
-        {{>cta brand="e" icon="givehelp" link="/give-help/" name="Give Help"}}
-      </div>
-      {{> manchester/stats }}
+<div id="js-statistics-output"></div>
+
+{{> locations/banners/mcr-homelessness-partnership }}
+
+{{> locations/banners/big-change-mcr }}
+
+{{> locations/banners/migrant-destitution-fund-banner }}
+
+{{> locations/gm-banner }}
+
+<div class="block block--standards-toolkit">
+  <div class="block__standards-toolkit-pad"></div>
+  <div class="home__copy home__copy--standards-toolkit">
+    <h1>Standards Toolkit</h1>
+    <p>Are you a volunteer-led group that provides support for people on the streets? We have put together this best practice guide to help you protect the vulnerable adults that use these services, your volunteers and members of the public.</p>
+    <p>This toolkit makes it easier for you to develop and be recognised for the quality of your service. The information, training and support provided here supports you to ensure you have adequate standards and safeguarding in place.</p>
+    <a class="btn btn--brand-e" href="/manchester/standards-toolkit/">
+      <span class="btn__text">More information</span>
+    </a>
+  </div>
+</div>
+
+<div class="block block--minor-highlight">
+  <div class="container container--central-cta">
+    <div class="block__content block__content--central-cta block__content--join-mailing-list">
+      <h1 class="h2">Get in touch</h1>
+      <p>If you would like to get involved, or have any offers, questions or suggestion, please get in touch at <a href="mailto: manchester@streetsupport.net">manchester@streetsupport.net</a>.</p>
     </div>
   </div>
 </div>
 
 <div id="js-news-output"></div>
 
-{{> manchester/home-promo }}
-
 <div class="block block--highlight block--promo">
   <div class="container">
     <div class="block__content partners">
       {{> manchester/supporters }}
-      <p>We are looking for businesses and organisations in Greater Manchester to <a href="/give-help/partnership/">support us</a> so that we can continue to develop this resource.</p>
+      <p>We are looking for businesses and organisations to <a href="/give-help/business-support/">support us</a> so that we can continue to develop this resource.</p>
       <p>If you share our vision of a society without homelessness, please <a href="mailto:sponsorship@streetsupport.net">get in touch</a>.</p>
     </div>
   </div>
 </div>
 
-</script>
+{{> loading-spinner}}
 
 <script id="js-swep-tpl" type="text/template">
-{{> swep-notification }}
+{{> find-help/swep-notification theLocationId="manchester" }}
+</script>
+
+<script id="js-news-tpl" type="text/template">
+    {{>news-posts }}
+</script>
+
+<script id="js-statistics-tpl" type="text/template">
+  {{> impact-statistics }}
 </script>
